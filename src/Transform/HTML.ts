@@ -1,8 +1,7 @@
 // Sandbox HTML elements
-
-function _getSandboxSafely() {
-  const sandbox = document.implementation.createHTMLDocument('sandbox')
-  return sandbox
+let sandbox: Document
+function getSandbox() {
+  return (sandbox ||= document.implementation.createHTMLDocument('sandbox'))
 }
 
 interface Storage {
@@ -43,9 +42,7 @@ export default {
   },
   fromSerializable(data: Storage) {
     try {
-      const element = _getSandboxSafely().createElement(
-        data.tagName
-      ) as HTMLElement
+      const element = getSandbox().createElement(data.tagName)
       element.innerHTML = data.innerHTML
       for (let attribute of Object.keys(data.attributes)) {
         try {
